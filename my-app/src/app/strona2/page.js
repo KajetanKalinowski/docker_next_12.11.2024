@@ -12,15 +12,42 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+
 import Link from "next/link";
 import { LoginForm } from "@/components/loginForm";
-
+import Edit from "@/components/editpost";
+import Delete from "@/components/delposts";
 
 const pb = new PocketBase('http://172.16.15.138:8080');
 
 export default function Home() {
 
   const [user,setUser]=useState(null)
+  const [posts,setPosts]=useState(null)
+  useEffect(()=>{
+    const getData = async ()=>{
+      try{
+        const records = await pb.collection('posts').getFullList({
+          sort: '-created',
+      });
+      console.log(records)
+      setPosts(records)
+      }catch(err){
+        console.log(err)
+      }finally{
+
+      }
+    }
+    getData()
+  },[])
   useEffect(()=>{
       setUser(pb.authStore.model)
       console.log(pb.authStore.model)
@@ -33,6 +60,29 @@ const logout = async()=>{
   pb.authStore.clear();
   setUser(null)
 }
+const updated = (item)=>{
+  console.log(item)
+
+    var index = null
+    var tmpPosty = [...posts]
+    for(let i in posts){
+      if(posts[i].id == item.id){
+        index = i
+      }
+    }
+    tmpPosty[index] == item
+    setPosts(tmpPosty)
+    console.log("index: " + index)
+  
+}
+const deleted = (id)=>{
+  setPosts((prev)=>(
+    prev.filter((ele)=>{
+      return ele.id != id 
+    })
+  ))
+}
+
 
   return(
     <div>
@@ -65,6 +115,25 @@ const logout = async()=>{
 
       
     </div>
+    {user && 
+      <div className="flex justify-center w-full flex-wrap gap-5">
+          {posts && posts.map((post)=>(
+            <Card key={post.id}>
+            <CardHeader>
+              <CardTitle>{post.tytul}</CardTitle>
+              <CardDescription></CardDescription>
+            </CardHeader>
+            <CardContent>
+              {post.opis}
+            </CardContent>
+            <CardFooter>
+              {user.id==post.autor?<><Edit item={post} onupdated={updated}/><Delete id={post.id} ondeleted={deleted}/></>:";)"}
+              
+            </CardFooter>
+          </Card>
+          ))}
+        </div>
+    }
     </div>
   )
 }
