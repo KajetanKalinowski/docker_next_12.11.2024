@@ -70,7 +70,8 @@ const updated = (item)=>{
         index = i
       }
     }
-    tmpPosty[index] == item
+    tmpPosty[index] = item
+    console.log(item)
     setPosts(tmpPosty)
     console.log("index: " + index)
   
