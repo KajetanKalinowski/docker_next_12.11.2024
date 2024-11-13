@@ -16,7 +16,7 @@ import Link from "next/link";
 import { LoginForm } from "@/components/loginForm";
 
 
-const pb = new PocketBase('http://192.168.0.136:8080');
+const pb = new PocketBase('http://172.16.15.138:8080');
 
 export default function Home() {
 
@@ -54,7 +54,7 @@ const logout = async()=>{
     {user?
     <>
     <DropdownMenuItem asChild><Button onClick={logout}>wyloguj</Button></DropdownMenuItem>
-    <DropdownMenuItem asChild><AvUser>Ustawienia</AvUser></DropdownMenuItem>
+    <DropdownMenuItem asChild><AvUser user={user} setUser={setUser}>Ustawienia</AvUser></DropdownMenuItem>
     </>
     :
     <DropdownMenuItem asChild><LoginForm onLogin={login}>logowanie</LoginForm></DropdownMenuItem>

@@ -15,16 +15,17 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
   } from "@/components/ui/alert-dialog"  
-const pb = new PocketBase('http://192.168.0.136:8080');
-export default function AvUser(){
-    const [user,setUser] = useState(null)
+const pb = new PocketBase('http://172.16.15.138:8080');
+export default function AvUser({user,setUser}){
     const [open,setOpen]=useState(false)
+    
     useEffect(()=>{
         setUser(pb.authStore.model)
     },[])
     const [zdjecie, setZdjecie] = useState(null)
     const handleZdjecie = (e) =>{
         setZdjecie(e.target.files[0])
+        
       }
       const handleButtonClick = async ()=>{
         console.log(zdjecie) 
@@ -36,6 +37,8 @@ export default function AvUser(){
         const record = await pb.collection('users').update(user.id,formData);
         console.log(record)
         setOpen()
+        window.location.reload()
+        
     }catch(err){
         console.log(err)
     }

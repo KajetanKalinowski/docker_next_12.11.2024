@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label"
 import { useState,useEffect } from "react"
 import PocketBase from 'pocketbase';
 
-const pb = new PocketBase('http://192.168.0.136:8080');
+const pb = new PocketBase('http://172.16.15.138:8080');
 export function LoginForm({onLogin}) {
     const [user,setUser]=useState(null)
     const [pass,setPass]=useState(null)
